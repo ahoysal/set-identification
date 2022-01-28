@@ -26,4 +26,9 @@ public class Color {
     public static int setBlue(int rgb, int b) {
         return (rgb & 0xFFFFFF00) + b;
     }
+
+    public static double getDistance2(int v1, int v2) {
+        int dr = getRed(v1) - getRed(v2), dg = getGreen(v1) - getGreen(v2), db = getBlue(v1) - getBlue(v2);
+        return (dr * dr + dg * dg + db * db) / 195075.0; // 195075 == 255^2 + 255^2 + 255^2
+    }
 }
