@@ -14,17 +14,21 @@ public class Main {
         System.out.println(pas.size());
         for (PixelArea pa : pas) {
             int lineColor = Color.rgb2int((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
-            Card c = new Card(pa.pixelSquare);
-            Renderer.drawLine(grid, pa.minX, pa.maxY, pa.maxX, pa.maxY, c.color); // top line
-            Renderer.drawLine(grid, pa.maxX, pa.maxY, pa.maxX, pa.minY, c.color); // right line
-            Renderer.drawLine(grid, pa.maxX, pa.minY, pa.minX, pa.minY, c.color); // bottom line
-            Renderer.drawLine(grid, pa.minX, pa.minY, pa.minX, pa.maxY, c.color); // bottom line
+            Card card = new Card(pa.pixelSquare);
+
+            /*
+            for (int r = 0; r < pa.pixelSquare.length; r++) {
+                for (int c = 0; c < pa.pixelSquare[r].length; c++) {
+                    grid[r + pa.minY][c + pa.minX] = pa.pixelSquare[r][c];
+                }
+            }
+            */
             
-            Renderer.drawLine(grid, pa.minX, pa.minY, pa.maxX, pa.maxY, c.color);
-            Renderer.drawLine(grid, pa.minX, pa.maxY, pa.maxX, pa.minY, c.color);
-            //for (int[] loc : pa.pixelLocations) {
-            //    grid[loc[1]][loc[0]] = lineColor;
-            //}
+            
+            //#region render box
+            Renderer.drawRect(grid, pa.minX, pa.minY, pa.maxX, pa.maxY, card.color.getValue());
+            //Renderer.drawCross(grid, pa.minX, pa.minY, pa.maxX, pa.maxY, card.color.getValue());
+            //#endregion
         }
 
         Image output = new Image("output.png", grid[0].length, grid.length);

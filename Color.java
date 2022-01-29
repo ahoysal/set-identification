@@ -1,4 +1,20 @@
 public class Color {
+
+    public static enum PrimaryColor {
+        RED (0xff0000),
+        GREEN (0x00ff00),
+        BLUE (0x0000ff);
+
+        private int value;
+        private PrimaryColor(int rgb) {
+            this.value = rgb;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
     public static int rgb2int(int r, int g, int b) {
         return (0xFF << 24) + (r << 16) + (g << 8) + (b);
     }
@@ -30,5 +46,12 @@ public class Color {
     public static double getDistance2(int v1, int v2) {
         int dr = getRed(v1) - getRed(v2), dg = getGreen(v1) - getGreen(v2), db = getBlue(v1) - getBlue(v2);
         return (dr * dr + dg * dg + db * db) / 195075.0; // 195075 == 255^2 + 255^2 + 255^2
+    }
+
+    public static PrimaryColor maxPrimary(int v) {
+        int max = Math.max(getRed(v), Math.max(getGreen(v), getBlue(v)));
+        if (max == getRed(v)) return PrimaryColor.RED;
+        if (max == getGreen(v)) return PrimaryColor.GREEN;
+        return PrimaryColor.BLUE;
     }
 }

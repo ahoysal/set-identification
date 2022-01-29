@@ -21,4 +21,16 @@ public class Renderer {
             }
         }
     }
+
+    public static void drawRect(int[][] grid, int x0, int y0, int x1, int y1, int color) {
+        Renderer.drawLine(grid, x0, y1, x1, y1, color); // top line
+        Renderer.drawLine(grid, x1, y1, x1, y0, color); // right line
+        Renderer.drawLine(grid, x1, y0, x0, y0, color); // bottom line
+        Renderer.drawLine(grid, x0, y0, x0, y1, color); // bottom line
+    }
+
+    public static void drawCross(int[][] grid, int x0, int y0, int x1, int y1, int color) {
+        Renderer.drawLine(grid, x0, y0, x1, y1, color);
+        Renderer.drawLine(grid, x0, y1, x1, y0, color);
+    }
 }
