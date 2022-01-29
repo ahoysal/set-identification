@@ -10,7 +10,6 @@ public class Main {
 
         int[][] grid = input.getGrid();
         
-        short[][][] rgb = input.convert(grid);
         ArrayList<PixelArea> pas = AreaDetection.processImage(grid);
         System.out.println(pas.size());
         for (PixelArea pa : pas) {
@@ -25,11 +24,8 @@ public class Main {
             //}
         }
 
-        Renderer.drawLine(grid, 0, 0, 100, 100, 0xFFFFFFFF); // bottom line
-
-        System.out.println("creating output!");
         Image output = new Image("output.png", grid[0].length, grid.length);
         output.setGrid(grid);
-        System.out.println("done!");
+        System.out.println("finished with 0 errors!");
     }
 }
