@@ -1,13 +1,17 @@
 import java.util.ArrayList;
 
-public class ritikareadetection{
+/**
+ * @author Algorithim by Ritik
+ * Sligtly modified to take int arrays by Aagrim
+ */
+public class AreaDetection {
 
     //Say there are two pixels, one is at the top right of the other, should it be counted as "connected"?
-    public boolean adjacents = true;
+    public static boolean adjacents = true;
     //Color of the area we should detect
-    public short[] color = {255,255,255};
+    public static int color = 0xFFFFFFFF;
     //The range of values
-    public int[] colorVariance = {5,5,5};
+    public static double colorVariance = 0.15;
 
     //Imagine there's a red circle on a canvas
     //However, there's a random 1 pixel line splitting it in half!
@@ -16,40 +20,37 @@ public class ritikareadetection{
     //If you increase neighborSize to 2, it'll bypass the line
     //If it's a 2 pixel wide line, you can set it to 3
     //neighborSize makes the program exponentially more laggy though
-    public int neighborSize = 1;
+    public static int neighborSize = 1;
 
 
-    public ArrayList<PixelArea> processImage(short[][] red, short[][] green, short[][] blue) {
+    public static ArrayList<PixelArea> processImage(int[][] grid) {
         //We store pixels of one's we have found
-        short[][] foundpixels = new short[red.length][red[0].length];
+        int[][] foundpixels = new int[grid.length][grid[0].length];
         //We store seperate areas of pixels
         ArrayList<PixelArea> areas = new ArrayList<PixelArea>();
 
         //Loop through all the pixels...
-        for(int y = 0; y < red.length; y++){
+        for(int y = 0; y < grid.length; y++){
 
-            ColLoop: for(int x = 0; x < red[0].length; x++){
+            ColLoop: for(int x = 0; x < grid[0].length; x++){
                 //If the pixel we are currently on, is contained in an area, we continue
                 //We dont wanna execute our area algorithm on it.
                 if(foundpixels[y][x] != 0) continue;
                 //Store the RGB vals of the pixel
-                short[] pixel = {red[y][x], green[y][x], blue[y][x]};
+                int pixel = grid[y][x];
 
                 PixelArea area;
 
                 //[Math.abs(color[0] - pixel[0]), Math.abs(color[1] - pixel[1]), Math.abs(color[1] - pixel[1])]
-                int[] colordifference = difference(color, pixel);
-
-
+                
                 //See if any of the differences is beyond the colorVariance
-                for(int i = 0; i < colordifference.length; i++){
-                    //If so, we move on from this pixel, we should not run our area alg on it
-                    if(colordifference[i] > colorVariance[i]) continue ColLoop;
-                }
+                //If so, we move on from this pixel, we should not run our area alg on it
+                if (Color.getDistance2(color, pixel) > colorVariance) continue ColLoop;
+
                 //(x,y) format of location
                 int[] loc = {x,y};
                 //run algorithm
-                area = floodDetection(red, green, blue, foundpixels, loc, color, colorVariance, neighborSize, adjacents);
+                area = floodDetection(grid, foundpixels, loc, color, colorVariance, neighborSize, adjacents);
                 //we get one single area, the area that the pixel was inside of
                 //now all pixels inside of that area were put in foundpixels
                 areas.add(area);
@@ -64,7 +65,7 @@ public class ritikareadetection{
     }
 
 
-    public PixelArea floodDetection(short[][] red, short[][] green, short[][] blue, short[][] copy, int[] start, short[] color, int[] colorVariance, int neighborSize, boolean adjacents){
+    public static PixelArea floodDetection(int[][] grid, int[][] copy, int[] start, int color, double colorVariance, int neighborSize, boolean adjacents) {
         //note it's not really the flood fill algorithm
         //flood is a good name for what i'm doing thuogh
 
@@ -73,14 +74,14 @@ public class ritikareadetection{
         //(the walls are pixels we don't want)
 
         //now at the middle of the maze (int[] start)
-        //poor water there
+        //pour water there
         //the area the water covers is the area that the algorithm finds
         //once all the area is found, we stop.
 
         ArrayList<int[]> flooders = new ArrayList<int[]>();
         ArrayList<int[]> newflooders = new ArrayList<int[]>();
         ArrayList<int[]> pixelsflooded = new ArrayList<int[]>();
-        short[][][] pixelSquare;
+        int[][] pixelSquare;
 
         flooders.add(start);
         pixelsflooded.add(start);
@@ -101,16 +102,13 @@ public class ritikareadetection{
                 NeighborsLoop: for(int i2 = 0; i2 < neighbors.size(); i2++){
 
                     int[] loc2 = neighbors.get(i2);
-                    if(inbound(red[0].length, red.length, loc2[0], loc2[1]) == false) continue;
+                    if(inbound(grid[0].length, grid.length, loc2[0], loc2[1]) == false) continue;
                     if(copy[loc2[1]][loc2[0]] != 0) continue;
 
-                    short[] pixel2 = {red[loc2[1]][loc2[0]], green[loc2[1]][loc2[0]], blue[loc2[1]][loc2[0]] };
-                    int[] colordifference = difference(color, pixel2);
+                    int pixel2 = grid[loc2[1]][loc2[0]];
+                    if (Color.getDistance2(color, pixel2) > colorVariance) continue NeighborsLoop;
 
-                    for(int i3 = 0; i3 < colordifference.length; i3++){
-                        if(colordifference[i3] > colorVariance[i3]) continue NeighborsLoop;
-                    }
-
+                    // set min and maxes accordingly
                     if(loc2[0] < minX) minX = loc2[0];
                     if(loc2[1] < minY) minY = loc2[1];
                     if(loc2[0] > maxX) maxX = loc2[0];
@@ -131,7 +129,7 @@ public class ritikareadetection{
 
         }
 
-        pixelSquare = new short[maxY - minY + 1][maxX - minX + 1][3];
+        pixelSquare = new int[maxY - minY + 1][maxX - minX + 1];
 
         int[][] minMaxes = new int[maxY - minY + 1][2];
 
@@ -170,7 +168,7 @@ public class ritikareadetection{
                 int x = i2;
 
                 copy[y][x] = 1;
-                pixelSquare[y - minY][x - minX] = new short[]{red[y][x], green[y][x], blue[y][x]};
+                pixelSquare[y - minY][x - minX] = grid[y][x];
 
             }
 
@@ -192,7 +190,7 @@ public class ritikareadetection{
     }
 
 
-    public ArrayList<int[]> getNeighbors(int[] loc, int size, boolean adjacent){
+    public static ArrayList<int[]> getNeighbors(int[] loc, int size, boolean adjacent){
 
         ArrayList<int[]> neighbors = new ArrayList<int[]>();
 
@@ -212,34 +210,9 @@ public class ritikareadetection{
 
     }
 
-    public int[] difference(short[] color, short[] color2){
-
-        int[] sum = new int[color.length];
-
-
-
-        for(int i = 0; i < color.length; i++) sum[i] = Math.abs(color[i] - color2[i]);
-
-        return sum;
-
-
-
-    }
-
-    public boolean inbound(int xl, int yl, int x, int y){
+    public static boolean inbound(int xl, int yl, int x, int y){
         return (x > -1 && y > -1 && x < xl && y < yl);
     }
-
-}
-
-class PixelArea{
-
-    int minX;
-    int minY;
-    int maxX;
-    int maxY;
-    short[][][] pixelSquare;
-    ArrayList<int[]> pixelLocations;
 
 }
 

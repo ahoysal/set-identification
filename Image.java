@@ -32,6 +32,28 @@ public class Image {
         return arr;
     }
 
+    public short[][][] convert(int[][] g) {
+        short[][][] tr = new short[][][]{new short[g.length][g[0].length], new short[g.length][g[0].length], new short[g.length][g[0].length]};
+        for (int r = 0; r < g.length; r++) {
+            for (int c = 0; c < g[r].length; c++) {
+                tr[0][r][c] = (short) Color.getRed(g[r][c]);
+                tr[1][r][c] = (short) Color.getGreen(g[r][c]);
+                tr[2][r][c] = (short) Color.getBlue(g[r][c]);
+            }
+        }
+        return tr;
+    }
+
+    public int[][] convert(short[][][] g) {
+        int[][] grid = new int[g.length][g[0].length];
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[0].length; c++) {
+                grid[r][c] = Color.rgb2int(g[0][r][c], g[1][r][c], g[2][r][c]);
+            }
+        }
+        return grid;
+    }
+
     public void setGrid(int[][] grid) {
         if (grid.length != img.getHeight() || grid[0].length != img.getWidth()) makeEmpty(grid[0].length, grid.length);
         img.setRGB(0, 0, img.getWidth(), img.getHeight(), flatten(grid), 0, grid[0].length);
