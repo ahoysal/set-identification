@@ -6,14 +6,25 @@ public class Main {
     }
 
     public static void imageTest() {
-        Image input = new Image("input.jpeg");
+
+        identify("inputs/input1.jpeg", "outputs/output1.png");
+        identify("inputs/input2.jpeg", "outputs/output2.png");
+        identify("inputs/input3.png", "outputs/output3.png");
+        identify("inputs/input4.jpeg", "outputs/output4.png");
+        identify("inputs/input5.jpeg", "outputs/output5.png");
+
+        System.out.println("finished with 0 errors!");
+    }
+
+    private static void identify(String inputPath, String outputPath) {
+
+        Image input = new Image(inputPath);
 
         int[][] grid = input.getGrid();
         
         ArrayList<PixelArea> pas = AreaDetection.processImage(grid);
         System.out.println(pas.size());
         for (PixelArea pa : pas) {
-            int lineColor = Color.rgb2int((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
             Card card = new Card(pa.pixelSquare);
 
             /*
@@ -27,12 +38,11 @@ public class Main {
             
             //#region render box
             Renderer.drawRect(grid, pa.minX, pa.minY, pa.maxX, pa.maxY, card.color.getValue());
-            //Renderer.drawCross(grid, pa.minX, pa.minY, pa.maxX, pa.maxY, card.color.getValue());
+            Renderer.drawCross(grid, pa.minX, pa.minY, pa.maxX, pa.maxY, card.color.getValue());
             //#endregion
         }
 
-        Image output = new Image("output.png", grid[0].length, grid.length);
+        Image output = new Image(outputPath, grid[0].length, grid.length);
         output.setGrid(grid);
-        System.out.println("finished with 0 errors!");
     }
 }

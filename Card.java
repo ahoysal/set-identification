@@ -2,15 +2,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Card {
-    // values from lightest and darkest color on set card using gimp
-    private static final int[] REDS = new int[]{0xe7b6af, 0xe7170a};
-    private static final int[] GREENS = new int[]{0xbfd7bf, 0x2d752b};
-    private static final int[] BLUES = new int[]{0xc3c3dd, 0x0f0f41, 0x686988};
-
     // values you DONT want it to be near; you want to disregard these
     private static final int[] AWAYS = new int[]{0xd4d6d1, 0x381100};
 
-    // if further than threshold distance away, disregard as noise
+    // if close to AWAYS values by threshold, disregard as noise
+    // higher theshold = more noise resistant, more likley to remove useful color info
     private static final double threshold = 0.02;
 
     Color.PrimaryColor color;
@@ -38,7 +34,7 @@ public class Card {
             if (max == null || max.getValue() < kvp.getValue()) max = kvp;
         }
 
-        color = max.getKey();
+        color = max != null ? max.getKey() : Color.PrimaryColor.RED;
     }
 
     /*

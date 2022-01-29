@@ -11,7 +11,7 @@ public class AreaDetection {
     //Color of the area we should detect
     public static int color = 0xFFFFFFFF;
     //The range of values
-    public static double colorVariance = 0.15;
+    public static double colorVariance = 0.06;
 
     //Imagine there's a red circle on a canvas
     //However, there's a random 1 pixel line splitting it in half!
