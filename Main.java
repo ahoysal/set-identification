@@ -14,11 +14,14 @@ public class Main {
         System.out.println(pas.size());
         for (PixelArea pa : pas) {
             int lineColor = Color.rgb2int((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255));
-            Renderer.drawLine(grid, pa.minX, pa.maxY, pa.maxX, pa.maxY, lineColor); // top line
-            Renderer.drawLine(grid, pa.maxX, pa.maxY, pa.maxX, pa.minY, lineColor); // right line
-            Renderer.drawLine(grid, pa.maxX, pa.minY, pa.minX, pa.minY, lineColor); // bottom line
-            Renderer.drawLine(grid, pa.minX, pa.minY, pa.minX, pa.maxY, lineColor); // bottom line
+            Card c = new Card(pa.pixelSquare);
+            Renderer.drawLine(grid, pa.minX, pa.maxY, pa.maxX, pa.maxY, c.color); // top line
+            Renderer.drawLine(grid, pa.maxX, pa.maxY, pa.maxX, pa.minY, c.color); // right line
+            Renderer.drawLine(grid, pa.maxX, pa.minY, pa.minX, pa.minY, c.color); // bottom line
+            Renderer.drawLine(grid, pa.minX, pa.minY, pa.minX, pa.maxY, c.color); // bottom line
             
+            Renderer.drawLine(grid, pa.minX, pa.minY, pa.maxX, pa.maxY, c.color);
+            Renderer.drawLine(grid, pa.minX, pa.maxY, pa.maxX, pa.minY, c.color);
             //for (int[] loc : pa.pixelLocations) {
             //    grid[loc[1]][loc[0]] = lineColor;
             //}
