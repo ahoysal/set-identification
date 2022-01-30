@@ -37,45 +37,6 @@ public class Card {
         color = max != null ? max.getKey() : Color.PrimaryColor.RED;
     }
 
-    /*
-    int color;
-
-    public Card(int[][] grid, boolean hi) {
-        int redCount = 0, greenCount = 0, blueCount = 0;
-        for (int r = 0; r < grid.length; r++) {
-            for (int c = 0; c < grid[0].length; c++) {
-                int pixel = grid[r][c];
-                double redDist = findMinDist(pixel, REDS);
-                double greenDist = findMinDist(pixel, GREENS);
-                double blueDist = findMinDist(pixel, BLUES);
-                double awayDist = findMinDist(pixel, AWAYS);
-
-                double minDist = Math.min(awayDist, Math.min(redDist, Math.min(greenDist, blueDist)));
-                if (minDist > threshold) continue;
-                else if (minDist == redDist) redCount++;
-                else if (minDist == greenDist) greenCount++;
-                else if (minDist == blueDist) blueCount++;
-
-                
-                //#region debugging
-                if (minDist == redDist) grid[r][c] = REDS[1];
-                else if (minDist == greenDist) grid[r][c] = GREENS[1];
-                else if (minDist == blueDist) grid[r][c] = BLUES[1];
-                else if (minDist == awayDist) grid[r][c] = AWAYS[0];
-                //#endregion
-                
-
-            }
-        }
-        int maxCount = Math.max(redCount, Math.max(greenCount, blueCount));
-
-        if (maxCount == redCount) color = REDS[1];
-        else if (maxCount == greenCount) color = GREENS[1];
-        else if (maxCount == blueCount) color = BLUES[1];
-    }
-
-    */
-
     private double findMinDist(int pixel, int[] colors) {
         double minAwayDist = 1.1;
         for (int col : colors) {

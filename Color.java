@@ -15,6 +15,8 @@ public class Color {
         }
     }
 
+    private final static double purpleThreshold = 0.075;
+
     public static int rgb2int(int r, int g, int b) {
         return (0xFF << 24) + (r << 16) + (g << 8) + (b);
     }
@@ -50,7 +52,10 @@ public class Color {
 
     public static PrimaryColor maxPrimary(int v) {
         int max = Math.max(getRed(v), Math.max(getGreen(v), getBlue(v)));
-        if (max == getRed(v)) return PrimaryColor.RED;
+        if (max == getRed(v)) {
+            if (getRed(v) / (double) getBlue(v) < 1 + purpleThreshold) return PrimaryColor.BLUE; // if purple
+            return PrimaryColor.RED;
+        }
         if (max == getGreen(v)) return PrimaryColor.GREEN;
         return PrimaryColor.BLUE;
     }
