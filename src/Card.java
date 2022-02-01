@@ -50,6 +50,10 @@ public class Card {
 
 
     public Card(int[][] grid) {
+        color = getColor(grid);
+    }
+
+    public static PrimaryColor getColor(int[][] grid) {
         HashMap<PrimaryColor, Integer> count = new HashMap<>();
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {
@@ -72,7 +76,7 @@ public class Card {
             if (max == null || max.getValue() < kvp.getValue()) max = kvp;
         }
 
-        color = max != null ? max.getKey() : PrimaryColor.RED;
+        return max != null ? max.getKey() : PrimaryColor.RED;
     }
 
     public static boolean[] getMatchTable(Card c1, Card c2) {
@@ -84,7 +88,7 @@ public class Card {
         };
     }
 
-    private double findMinDist(int pixel, int[] colors) {
+    private static double findMinDist(int pixel, int[] colors) {
         double minAwayDist = 1.1;
         for (int col : colors) {
             minAwayDist = Math.min(minAwayDist, Color.getDistance2(col, pixel));
