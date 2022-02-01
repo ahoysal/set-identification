@@ -1,20 +1,5 @@
 public class Color {
 
-    public static enum PrimaryColor {
-        RED (0xff0000),
-        GREEN (0x00ff00),
-        BLUE (0x0000ff);
-
-        private int value;
-        private PrimaryColor(int rgb) {
-            this.value = rgb;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
-
     private final static double purpleThreshold = 0.075;
 
     public static int rgb2int(int r, int g, int b) {
@@ -50,13 +35,13 @@ public class Color {
         return (dr * dr + dg * dg + db * db) / 195075.0; // 195075 == 255^2 + 255^2 + 255^2
     }
 
-    public static PrimaryColor maxPrimary(int v) {
+    public static Card.PrimaryColor maxPrimary(int v) {
         int max = Math.max(getRed(v), Math.max(getGreen(v), getBlue(v)));
         if (max == getRed(v)) {
-            if (getRed(v) / (double) getBlue(v) < 1 + purpleThreshold) return PrimaryColor.BLUE; // if purple
-            return PrimaryColor.RED;
+            if (getRed(v) / (double) getBlue(v) < 1 + purpleThreshold) return Card.PrimaryColor.BLUE; // if purple
+            return Card.PrimaryColor.RED;
         }
-        if (max == getGreen(v)) return PrimaryColor.GREEN;
-        return PrimaryColor.BLUE;
+        if (max == getGreen(v)) return Card.PrimaryColor.GREEN;
+        return Card.PrimaryColor.BLUE;
     }
 }
