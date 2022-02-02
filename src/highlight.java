@@ -1,34 +1,35 @@
-package src;
+
+import processing.core.PApplet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
-public class highlight implements PixelFilter {
+public class highlight{
 
 
 
     public int frames = 0;
-    public static int hello = 0;
+    public long starttime = System.currentTimeMillis();
 
-    @Override
-    public DImage processImage(short[][] red, short[][] green, short[][] blue) {
+    public short[][][] processImage(short[][] red, short[][] green, short[][] blue) {
 
         frames++;
-
-        hello = 5;
 
         double[] shapes = {0.096, 0.128, 100};
         String[] shapesStr = {"diamond", "squiggly", "circle"};
 
-        double[] states = {12, 200, 1000};
+        double[] states = {8, 200, 1000};
         String[] statesStr = {"hollow", "shaded", "filled"};
-
+        /*
         Convolution filter = new Convolution();
         short[][][] op = filter.drawOverlay(red, green, blue, filter.blurKernel);
 
         red = op[0];
         green = op[1];
         blue = op[2];
+        */
+
 
         ritikareadetection detect = new ritikareadetection();
 
@@ -42,6 +43,8 @@ public class highlight implements PixelFilter {
         ArrayList<PixelArea> foundAreas = detect.processImage(red, green, blue);
 
         drawtext text = new drawtext();
+
+        boolean fdas = false;
 
 
         for(int i = 0; i < foundAreas.size(); i++){
@@ -99,7 +102,7 @@ public class highlight implements PixelFilter {
             PixelArea area1 = newAreas.get(0);
 
             int[] avgCol = getAvgSquare(area1, red, green, blue);
-            /*
+
             removeedges remover = new removeedges();
 
             for(int r = 0; r < 6; r++){
@@ -111,20 +114,13 @@ public class highlight implements PixelFilter {
                 area1.pixelSquare[2] = newedged[2];
 
             }
-            */
-
-            getedges shapeDetect = new getedges();
-            short[][][] edged = getedges.getEdges(area1.pixelSquare[0],area1.pixelSquare[1],area1.pixelSquare[2]);
-            double c = anglechange.change(edged[0], edged[1], edged[2])*(1000);
 
 
             int[] avg = getAvg(foundAreas.get(i), red, green, blue);
-            double dist = getAvgDistance(area1, red, green, blue, avg, 0);
 
-            getcolor colorer = new getcolor();
+            double dist = getAvgDistance(area1, red, green, blue, avg, 6);
 
-
-            Object[] color = colorer.color((short)avgCol[0],(short)avgCol[1],(short)avgCol[2]);
+            Object[] color = getcolor.color((short)avgCol[0],(short)avgCol[1],(short)avgCol[2]);
 
 
 
@@ -147,7 +143,7 @@ public class highlight implements PixelFilter {
             text.processImage(red, green, blue);
 
             text.y += 20;
-            text.text = "state " + (int)c;//getShape(dist, states, statesStr) + " " + (int)dist;
+            text.text = "state " + getShape(dist, states, statesStr) + " " + (int)dist;
             text.processImage(red, green, blue);
 
         }
@@ -158,12 +154,11 @@ public class highlight implements PixelFilter {
             text.y = red.length / 2;
             text.opacity = 0.6;
             text.processImage(red, green, blue);
-            return img;
         }
 
 
-        img.setColorChannels(red, green, blue);
-        return img;
+        return new short[][][]{red, green, blue};
+
     }
 
 
@@ -243,6 +238,10 @@ public class highlight implements PixelFilter {
                 int dg = Math.abs(col[1] - g);
                 int db = Math.abs(col[2] - b);
 
+                if(dr < clamp) dr = 0;
+                if(dg < clamp) dg = 0;
+                if(db < clamp) db = 0;
+
                 //System.out.println(dr + " " + dg + " " + db);
 
                 int da = dr+dg+db;
@@ -250,9 +249,9 @@ public class highlight implements PixelFilter {
                 //System.out.println(da);
 
 
-                red[y + area.minY][x + area.minX] = (short)(dr);
-                green[y + area.minY][x + area.minX] = (short)(dg);
-                blue[y + area.minY][x + area.minX] = (short)(db);
+                //red[y + area.minY][x + area.minX] = (short)(dr);
+                //green[y + area.minY][x + area.minX] = (short)(dg);
+                //blue[y + area.minY][x + area.minX] = (short)(db);
 
                 if(r+g+b == 0) continue;
                 avg += da;
