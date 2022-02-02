@@ -27,13 +27,13 @@ public class Main {
         for (PixelArea pa : pas) {
             Card card = new Card(pa.pixelSquare);
 
-            /*
+            
             for (int r = 0; r < pa.pixelSquare.length; r++) {
                 for (int c = 0; c < pa.pixelSquare[r].length; c++) {
                     grid[r + pa.minY][c + pa.minX] = pa.pixelSquare[r][c];
                 }
             }
-            */
+            
             
             
             //#region render box
