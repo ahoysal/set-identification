@@ -44,4 +44,17 @@ public class Color {
         if (max == getGreen(v)) return Card.PrimaryColor.GREEN;
         return Card.PrimaryColor.BLUE;
     }
+
+    public static int averageColors(int accumulated, int toAdd, Integer count) {
+        double total = (double) (count + 1);
+        int tr = Color.rgb2int(
+            (int) ((Color.getRed(accumulated) * count + Color.getRed(toAdd)) / total),
+            (int) ((Color.getGreen(accumulated) * count + Color.getGreen(toAdd)) / total),
+            (int) ((Color.getBlue(accumulated) * count + Color.getBlue(toAdd)) / total)
+        );
+
+        count++;
+
+        return tr;
+    }
 }
