@@ -29,14 +29,13 @@ public class getcolor {
             //Color.RGBtoHSB(r, g, b, hsb);
             float[] color = new float[3];
 
-            Color.RGBtoHSB(r,g,b,color);
+            java.awt.Color.RGBtoHSB(r,g,b,color);
 
-            int col = Color.HSBtoRGB(color[0], 1, 0.5f);
-            Color smh = new Color(col);
+            int col = java.awt.Color.HSBtoRGB(color[0], 1f, 0.5f);
 
-            r = (short)smh.getRed();
-            g = (short)smh.getGreen();
-            b = (short)smh.getBlue();
+            r = (short)Color.getRed(col);
+            g = (short)Color.getGreen(col);
+            b = (short)Color.getBlue(col);
 
 
             colors.add(new Object[]{

@@ -45,7 +45,7 @@ public class Image {
     }
 
     public int[][] convert(short[][][] g) {
-        int[][] grid = new int[g.length][g[0].length];
+        int[][] grid = new int[g[0].length][g[0][0].length];
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {
                 grid[r][c] = Color.rgb2int(g[0][r][c], g[1][r][c], g[2][r][c]);

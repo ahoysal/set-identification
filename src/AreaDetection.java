@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Sligtly modified to take int arrays by Aagrim
  */
 public class AreaDetection {
-
+/*
     //Say there are two pixels, one is at the top right of the other, should it be counted as "connected"?
     public static boolean adjacents = true;
     //Color of the area we should detect
@@ -213,7 +213,7 @@ public class AreaDetection {
     public static boolean inbound(int xl, int yl, int x, int y){
         return (x > -1 && y > -1 && x < xl && y < yl);
     }
-
+*/
 }
 
 

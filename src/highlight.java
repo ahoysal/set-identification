@@ -1,6 +1,4 @@
 
-import processing.core.PApplet;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -8,13 +6,7 @@ import java.util.Arrays;
 public class highlight{
 
 
-
-    public int frames = 0;
-    public long starttime = System.currentTimeMillis();
-
-    public short[][][] processImage(short[][] red, short[][] green, short[][] blue) {
-
-        frames++;
+    public static short[][][] processImage(short[][] red, short[][] green, short[][] blue) {
 
         double[] shapes = {0.096, 0.128, 100};
         String[] shapesStr = {"diamond", "squiggly", "circle"};
@@ -34,7 +26,7 @@ public class highlight{
         ritikareadetection detect = new ritikareadetection();
 
         detect.colorRatio = new double[]{1,1};
-        detect.colorRatioVariance = new double[]{0.1,0.1};
+        detect.colorRatioVariance = new double[]{0.14,0.14};
         detect.colorRatioMaximum = new int[]{160,160,160};
         detect.neighborSize = 1;
         detect.inverse = false;
@@ -143,7 +135,7 @@ public class highlight{
             text.processImage(red, green, blue);
 
             text.y += 20;
-            text.text = "state " + getShape(dist, states, statesStr) + " " + (int)dist;
+            text.text = "statea " + getShape(dist, states, statesStr) + " " + (int)dist;
             text.processImage(red, green, blue);
 
         }
@@ -162,7 +154,7 @@ public class highlight{
     }
 
 
-    public int[] getAvgSquare(PixelArea area, short[][] red, short[][] green, short[][] blue){
+    public static int[] getAvgSquare(PixelArea area, short[][] red, short[][] green, short[][] blue){
         int[] avgCol = {0,0,0};
         int sizePix  = area.pixelLocations.size();
         int counted = 0;
@@ -190,7 +182,7 @@ public class highlight{
         return avgCol;
     }
 
-    public int[] getAvg(PixelArea area, short[][] red, short[][] green, short[][] blue){
+    public static int[] getAvg(PixelArea area, short[][] red, short[][] green, short[][] blue){
         int[] avgCol = {0,0,0};
         int sizePix  = area.pixelLocations.size();
         int counted = 0;
@@ -220,7 +212,7 @@ public class highlight{
         return avgCol;
     }
 
-    public double getAvgDistance(PixelArea area, short[][] red, short[][] green, short[][] blue, int[] col, int clamp){
+    public static double getAvgDistance(PixelArea area, short[][] red, short[][] green, short[][] blue, int[] col, int clamp){
         double avg = 0;
         //int sizePix;
         int count = 0;
@@ -279,7 +271,7 @@ public class highlight{
 
     }
 
-    public String getShape(double r, double[] n, String[] s){
+    public static String getShape(double r, double[] n, String[] s){
 
         for(int a = 0; a < n.length; a++){
             if(r < n[a]) return s[a];
