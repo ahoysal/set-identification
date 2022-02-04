@@ -65,7 +65,7 @@ public class Card {
             for (Number k : Number.values()) {
                 if (k.value == n) return k;
             }
-            return ONE;
+            return THREE;
         }
     }
     
@@ -89,10 +89,11 @@ public class Card {
         this.cardArea = cardArea;
         ritikareadetection.inverse = true;
         internal = ritikareadetection.processImage(cardArea.pixelSquare[0], cardArea.pixelSquare[1], cardArea.pixelSquare[2]);
+
         color = getColor(Image.convert(cardArea.pixelSquare));
+        shape = getShape();
         number = getNumber();
         fill = getFill();
-        shape = getShape();
     }
 
     public String toString() {
@@ -131,6 +132,8 @@ public class Card {
         PixelArea area1 = internal.get(0);
 
         double dist = highlight.getAvgDistance(area1, baseGrid[0], baseGrid[1], baseGrid[2], avg, 6);
+
+        System.out.println(dist);
 
         return getFillThreshold(dist);
     }
@@ -184,6 +187,7 @@ public class Card {
             if(r < k.getThreshold()) return k;
         }
 
+        System.err.println("Hello");
         return Shape.values()[Shape.values().length-1];
     }
 

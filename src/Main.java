@@ -6,7 +6,7 @@ import java.awt.Desktop;
 
 public class Main {
     public static void main(String[] args) {
-        Image input = new Image("inputs/input1.jpeg");
+        Image input = new Image("inputs/input4.jpeg");
 
         short[][][] grid = Image.convert(input.getGrid());
 
