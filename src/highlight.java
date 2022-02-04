@@ -1,10 +1,28 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class highlight{
 
+
+    public static ArrayList<Card> getCards(short[][][] image) {
+        ArrayList<Card> cards = new ArrayList<>();
+
+        ArrayList<PixelArea> potential = ritikareadetection.processImage(image[0], image[1], image[2]);
+
+        for (int i = 0; i < potential.size(); i++) {
+            PixelArea current = potential.get(i);
+            if(current.pixelSquareLocations.size() < 500){
+                potential.remove(i);
+                i--;
+                continue;
+            }
+
+            cards.add(new Card(current, image));
+        }
+
+        return cards;
+    }
 
     public static short[][][] processImage(short[][] red, short[][] green, short[][] blue) {
 
@@ -22,17 +40,14 @@ public class highlight{
         blue = op[2];
         */
 
-
-        ritikareadetection detect = new ritikareadetection();
-
-        detect.colorRatio = new double[]{1,1};
-        detect.colorRatioVariance = new double[]{0.14,0.14};
-        detect.colorRatioMaximum = new int[]{160,160,160};
-        detect.neighborSize = 1;
-        detect.inverse = false;
+        ritikareadetection.colorRatio = new double[]{1,1};
+        ritikareadetection.colorRatioVariance = new double[]{0.14,0.14};
+        ritikareadetection.colorRatioMaximum = new int[]{160,160,160};
+        ritikareadetection.neighborSize = 1;
+        ritikareadetection.inverse = false;
 
 
-        ArrayList<PixelArea> foundAreas = detect.processImage(red, green, blue);
+        ArrayList<PixelArea> foundAreas = ritikareadetection.processImage(red, green, blue);
 
         drawtext text = new drawtext();
 
@@ -41,8 +56,7 @@ public class highlight{
 
         for(int i = 0; i < foundAreas.size(); i++){
 
-            detect.neighborSize = 1;
-
+            ritikareadetection.neighborSize = 1;
 
             short[][][] area = foundAreas.get(i).pixelSquare;
             int size = foundAreas.get(i).pixelSquareLocations.size();
@@ -58,8 +72,8 @@ public class highlight{
             }
 
 
-            detect.inverse = true;
-            ArrayList<PixelArea> newAreas = detect.processImage(area[0], area[1], area[2]);
+            ritikareadetection.inverse = true;
+            ArrayList<PixelArea> newAreas = ritikareadetection.processImage(area[0], area[1], area[2]);
 
 
             int totalPixels = 0;
@@ -67,7 +81,7 @@ public class highlight{
             int areas = 0;
             double ratio;
 
-            //SHAPE DETECTION
+            //SHAPE ritikareadetectionION
             for(int i2 = 0; i2 < newAreas.size(); i2++){
                 int size2 = newAreas.get(i2).pixelSquareLocations.size();
 

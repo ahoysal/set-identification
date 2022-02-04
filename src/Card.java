@@ -7,9 +7,18 @@ public class Card {
     private static final int[] AWAYS = new int[]{0xd4d6d1, 0x381100};
 
     public static enum Shape {
-        SQUIGGLE,
-        DIAMOND,
-        CIRCLE;
+        DIAMOND (0.096),
+        SQUIGGLE (0.128),
+        CIRCLE (100);
+
+        private double threshold;
+        private Shape(double t) {
+            threshold = t;
+        }
+
+        public double getThreshold() {
+            return threshold;
+        }
     }
 
     public static enum PrimaryColor {
@@ -28,9 +37,9 @@ public class Card {
     }
 
     public static enum Fill {
-        FILLED (1),
-        SHADED (0.2),
-        EMPTY (0.1);
+        EMPTY (8),
+        SHADED (200),
+        FILLED (1000);
 
         private double threshold;
         private Fill(double threshold) {
@@ -43,9 +52,21 @@ public class Card {
     }
 
     public static enum Number {
-        ONE,
-        TWO,
-        THREE;
+        ONE (1),
+        TWO (2),
+        THREE (3);
+
+        private int value;
+        private Number(int n) {
+            value = n; 
+        }
+
+        public static Number getCorresponding(int n) {
+            for (Number k : Number.values()) {
+                if (k.value == n) return k;
+            }
+            return ONE;
+        }
     }
     
     // if close to AWAYS values by threshold, disregard as noise
@@ -58,12 +79,27 @@ public class Card {
     Number number;
     PixelArea pa;
 
+    private ArrayList<PixelArea> internal;
+    private PixelArea cardArea;
+    private short[][][] baseGrid;
 
-    public Card(int[][] grid) {
-        color = getColor(grid);
+
+    public Card(PixelArea cardArea, short[][][] baseGrid) {
+        this.baseGrid = baseGrid;
+        this.cardArea = cardArea;
+        ritikareadetection.inverse = true;
+        internal = ritikareadetection.processImage(cardArea.pixelSquare[0], cardArea.pixelSquare[1], cardArea.pixelSquare[2]);
+        color = getColor(Image.convert(cardArea.pixelSquare));
+        number = getNumber();
+        fill = getFill();
+        shape = getShape();
     }
 
-    public static PrimaryColor getColor(int[][] grid) {
+    public String toString() {
+        return "Color = " + color.name() + "Num = " + number.name() + ", Fill = " + fill.name() + ", Shape = " + shape.name() + "\n";
+    }
+
+    public PrimaryColor getColor(int[][] grid) {
         HashMap<PrimaryColor, Integer> count = new HashMap<>();
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {
@@ -87,6 +123,68 @@ public class Card {
         }
 
         return max != null ? max.getKey() : PrimaryColor.RED;
+    }
+
+    public Fill getFill() {
+        int[] avg = highlight.getAvg(cardArea, baseGrid[0], baseGrid[1], baseGrid[2]);
+
+        PixelArea area1 = internal.get(0);
+
+        double dist = highlight.getAvgDistance(area1, baseGrid[0], baseGrid[1], baseGrid[2], avg, 6);
+
+        return getFillThreshold(dist);
+    }
+
+    public Number getNumber() {
+        return Number.getCorresponding(internal.size());
+    }
+
+    public Shape getShape() {
+        int totalPixels = 0;
+        int totalFill = 0;
+        int areas = 0;
+        double ratio;
+
+        for(int i2 = 0; i2 < internal.size(); i2++){
+            int size2 = internal.get(i2).pixelSquareLocations.size();
+
+            if(size2 < 200){
+                internal.remove(i2);
+                i2--;
+                continue;
+            }
+
+            totalPixels += size2;
+            totalFill += internal.get(i2).pixelLocations.size();
+            areas++;
+
+            internal.get(i2).minX += cardArea.minX;
+            internal.get(i2).minY += cardArea.minY;
+
+        }
+
+        ratio = (double)totalPixels / (cardArea.pixelSquareLocations.size() * areas);
+
+        return getShapeThreshold(ratio);
+        
+    }
+
+    public static Fill getFillThreshold(double r){
+
+        for(Fill k : Fill.values()){
+            if(r < k.getThreshold()) return k;
+        }
+
+        return Fill.values()[Fill.values().length-1];
+    }
+
+    public static Shape getShapeThreshold(double r){
+
+        for(Shape k : Shape.values()){
+            if(r < k.getThreshold()) return k;
+        }
+
+        return Shape.values()[Shape.values().length-1];
     }
 
 /*

@@ -32,7 +32,7 @@ public class Image {
         return arr;
     }
 
-    public short[][][] convert(int[][] g) {
+    public static short[][][] convert(int[][] g) {
         short[][][] tr = new short[][][]{new short[g.length][g[0].length], new short[g.length][g[0].length], new short[g.length][g[0].length]};
         for (int r = 0; r < g.length; r++) {
             for (int c = 0; c < g[r].length; c++) {
@@ -44,7 +44,7 @@ public class Image {
         return tr;
     }
 
-    public int[][] convert(short[][][] g) {
+    public static int[][] convert(short[][][] g) {
         int[][] grid = new int[g[0].length][g[0][0].length];
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {

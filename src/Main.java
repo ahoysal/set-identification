@@ -1,10 +1,19 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.Desktop;
 
 public class Main {
     public static void main(String[] args) {
+        Image input = new Image("inputs/input1.jpeg");
+
+        short[][][] grid = Image.convert(input.getGrid());
+
+        ArrayList<Card> cards = highlight.getCards(grid);
+
+        System.out.println(cards);
+        
         imageTest();
     }
 
@@ -23,7 +32,7 @@ public class Main {
         long start = System.currentTimeMillis();
         Image input = new Image(inputPath);
 
-        short[][][] grid = input.convert(input.getGrid());
+        short[][][] grid = Image.convert(input.getGrid());
         
         short[][][] newgrid = highlight.processImage(grid[0], grid[1], grid[2]);
 
@@ -31,7 +40,7 @@ public class Main {
 
         System.out.println("yo: " + (System.currentTimeMillis() - start));
 
-        output.setGrid(input.convert(newgrid));
+        output.setGrid(Image.convert(newgrid));
 
     }
     private static void identify(String inputPath, String outputPath, boolean open) {

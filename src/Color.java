@@ -45,6 +45,7 @@ public class Color {
         return Card.PrimaryColor.BLUE;
     }
 
+
     public static int averageColors(int accumulated, int toAdd, Integer count) {
         double total = (double) (count + 1);
         int tr = Color.rgb2int(

@@ -3,24 +3,24 @@ import java.util.ArrayList;
 public class ritikareadetection{
 
     //Say there are two pixels, one is at the top right of the other, should it be counted as "connected"?
-    public boolean adjacents = true;
+    public static boolean adjacents = true;
     //Color of the area we should detect
-    public short[] color = {255,255,255};
+    public static short[] color = {255,255,255};
     //The range of values
-    public int[] colorVariance = {5,5,5};
+    public static int[] colorVariance = {5,5,5};
 
     //{Green divided by Red, Blue divided by Green}
     //This is useful if you wanna select colors based on a ratio
     //For example, any shade of white has a ratio of 1:1:1
 
-    public double[] colorRatio = null;
-    public double[] colorRatioVariance = null;
-    public int[] colorRatioMaximum = null;
+    public static double[] colorRatio = new double[]{1,1};;
+    public static double[] colorRatioVariance = new double[]{0.14,0.14};
+    public static int[] colorRatioMaximum = new int[]{160,160,160};
 
 
-    public boolean inverse = false;
+    public static boolean inverse = false;
 
-    public boolean ignoreBlack = true;
+    public static boolean ignoreBlack = true;
 
     //Imagine there's a red circle on a canvas
     //However, there's a random 1 pixel line splitting it in half!
@@ -29,10 +29,10 @@ public class ritikareadetection{
     //If you increase neighborSize to 2, it'll bypass the line
     //If it's a 2 pixel wide line, you can set it to 3
     //neighborSize makes the program exponentially more laggy though
-    public int neighborSize = 1;
+    public static int neighborSize = 1;
 
 
-    public ArrayList<PixelArea> processImage(short[][] red, short[][] green, short[][] blue) {
+    public static ArrayList<PixelArea> processImage(short[][] red, short[][] green, short[][] blue) {
         //We store pixels of one's we have found
         short[][] foundpixels = new short[red.length][red[0].length];
         short[][] badpixels = new short[red.length][red[0].length];
@@ -92,7 +92,7 @@ public class ritikareadetection{
     }
 
 
-    public PixelArea floodDetection(short[][] red, short[][] green, short[][] blue, short[][] copy, short[][] badpixels, int[] start, short[] color, int[] colorVariance, int neighborSize, boolean adjacents){
+    public static PixelArea floodDetection(short[][] red, short[][] green, short[][] blue, short[][] copy, short[][] badpixels, int[] start, short[] color, int[] colorVariance, int neighborSize, boolean adjacents){
         //note it's not really the flood fill algorithm
         //flood is a good name for what i'm doing thuogh
 
@@ -236,7 +236,7 @@ public class ritikareadetection{
     }
 
 
-    public ArrayList<int[]> getNeighbors(int[] loc, int size, boolean adjacent){
+    public static ArrayList<int[]> getNeighbors(int[] loc, int size, boolean adjacent){
 
         ArrayList<int[]> neighbors = new ArrayList<int[]>();
 
@@ -256,7 +256,7 @@ public class ritikareadetection{
 
     }
 
-    public boolean difference(short[] color, short[] color2, int[] range){
+    public static boolean difference(short[] color, short[] color2, int[] range){
 
         //System.out.println("YUH!");
 
@@ -270,7 +270,7 @@ public class ritikareadetection{
 
     }
 
-    public boolean difference(short[] color, double[] colorRatio, double[] colorRatioVariance, int[] colorMaximum){
+    public static boolean difference(short[] color, double[] colorRatio, double[] colorRatioVariance, int[] colorMaximum){
 
         //System.out.println("YUH");
 
@@ -288,7 +288,7 @@ public class ritikareadetection{
 
     }
 
-    public boolean inbound(int xl, int yl, int x, int y){
+    public static boolean inbound(int xl, int yl, int x, int y){
         return (x > -1 && y > -1 && x < xl && y < yl);
     }
 
