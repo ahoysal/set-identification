@@ -1,29 +1,9 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class highlight{
 
-
-    public static ArrayList<Card> getCards(short[][][] image) {
-        ArrayList<Card> cards = new ArrayList<>();
-
-        ArrayList<PixelArea> potential = ritikareadetection.processImage(image[0], image[1], image[2]);
-
-        for (int i = 0; i < potential.size(); i++) {
-            PixelArea current = potential.get(i);
-            if(current.pixelSquareLocations.size() < 500){
-                potential.remove(i);
-                i--;
-                continue;
-            }
-
-            cards.add(new Card(current, image));
-        }
-
-        return cards;
-    }
 
     public static short[][][] processImage(short[][] red, short[][] green, short[][] blue) {
 
@@ -52,8 +32,6 @@ public class highlight{
 
         drawtext text = new drawtext();
 
-        boolean fdas = false;
-
 
         for(int i = 0; i < foundAreas.size(); i++){
 
@@ -61,7 +39,6 @@ public class highlight{
 
             short[][][] area = foundAreas.get(i).pixelSquare;
             int size = foundAreas.get(i).pixelSquareLocations.size();
-            ArrayList<int[]> locs = foundAreas.get(i).pixelLocations;
 
 
 
@@ -78,7 +55,6 @@ public class highlight{
 
 
             int totalPixels = 0;
-            int totalFill = 0;
             int areas = 0;
             double ratio;
 
@@ -93,7 +69,6 @@ public class highlight{
                 }
 
                 totalPixels += size2;
-                totalFill += newAreas.get(i2).pixelLocations.size();
                 areas++;
 
                 newAreas.get(i2).minX += foundAreas.get(i).minX;
@@ -169,7 +144,6 @@ public class highlight{
 
     public static int[] getAvgSquare(PixelArea area, short[][] red, short[][] green, short[][] blue){
         int[] avgCol = {0,0,0};
-        int sizePix  = area.pixelLocations.size();
         int counted = 0;
 
         for(int y = 0; y < area.pixelSquare[0].length; y++){

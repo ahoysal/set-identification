@@ -10,7 +10,7 @@ public class Main {
 
         short[][][] grid = Image.convert(input.getGrid());
 
-        ArrayList<Card> cards = highlight.getCards(grid);
+        ArrayList<Card> cards = Card.getCards(grid);
         for (Card card : cards) {
             System.out.println(card);
         }

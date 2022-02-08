@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -136,11 +135,10 @@ public class Card {
     }
 
     public Fill getFill() {
-
-
-
         int[] avg = highlight.getAvg(cardArea, baseGrid[0], baseGrid[1], baseGrid[2]);
 
+
+        if (internal.size() == 0) return Fill.EMPTY;
         PixelArea area1 = internal.get(0);
         removeEdges(area1);
 
@@ -155,7 +153,6 @@ public class Card {
 
     public Shape getShape() {
         int totalPixels = 0;
-        int totalFill = 0;
         int areas = 0;
         double ratio;
 
@@ -169,7 +166,6 @@ public class Card {
             }
 
             totalPixels += size2;
-            totalFill += internal.get(i2).pixelLocations.size();
             areas++;
 
             internal.get(i2).minX += cardArea.minX;
@@ -245,6 +241,25 @@ public class Card {
     }
     */
 
+    public static ArrayList<Card> getCards(short[][][] image) {
+        ArrayList<Card> cards = new ArrayList<>();
+
+        ArrayList<PixelArea> potential = ritikareadetection.processImage(image[0], image[1], image[2]);
+
+        for (int i = 0; i < potential.size(); i++) {
+            PixelArea current = potential.get(i);
+            if(current.pixelSquareLocations.size() < 500){
+                potential.remove(i);
+                i--;
+                continue;
+            }
+
+            cards.add(new Card(current, image));
+        }
+
+        return cards;
+    }
+
     private static int getMatchTable(Card c1, Card c2) {
         return ((c1.color == c2.color ? 1 : 0)) | 
         ((c1.shape == c2.shape ? 1 : 0) << 1) | 
@@ -258,18 +273,6 @@ public class Card {
             minAwayDist = Math.min(minAwayDist, Color.getDistance2(col, pixel));
         }
         return minAwayDist;
-    }
-
-    private static void testMatch() {
-        Card c1 = new Card(PrimaryColor.BLUE, Number.THREE, Fill.SHADED, Shape.CIRCLE);
-        Card c2 = new Card(PrimaryColor.RED, Number.THREE, Fill.SHADED, Shape.CIRCLE);
-        Card c3 = new Card(PrimaryColor.GREEN, Number.THREE, Fill.SHADED, Shape.CIRCLE);
-
-        int mt1 = getMatchTable(c1, c2);
-        int mt2 = getMatchTable(c2, c3);
-        int mt3 = getMatchTable(c1, c3);
-
-        System.out.println(mt1 == mt2 && mt2 == mt3);
     }
 
     public static ArrayList<Card[]> matches(ArrayList<Card> cards) {
