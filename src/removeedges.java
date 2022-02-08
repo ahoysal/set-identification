@@ -1,6 +1,6 @@
 public class removeedges {
 
-    public short[][][] removeEdges(short[][] red, short[][] blue, short[][] green){
+    public static short[][][] removeEdges(short[][] red, short[][] blue, short[][] green){
 
         short[][] cred = new short[red.length][red[0].length];
         short[][] cgreen = new short[red.length][red[0].length];
@@ -46,7 +46,7 @@ public class removeedges {
 
     }
 
-    public boolean inBound(int xl, int yl, int x, int y){
+    public static boolean inBound(int xl, int yl, int x, int y){
 
         return (x < xl && x >= 0) && (y < yl && y >= 0);
 

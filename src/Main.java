@@ -11,8 +11,14 @@ public class Main {
         short[][][] grid = Image.convert(input.getGrid());
 
         ArrayList<Card> cards = highlight.getCards(grid);
+        for (Card card : cards) {
+            System.out.println(card);
+        }
 
-        System.out.println(cards);
+        ArrayList<Card[]> matches = Card.matches(cards);
+        for (Card[] m : matches) {
+            System.out.println(Arrays.deepToString(m));
+        }
         
         imageTest();
     }

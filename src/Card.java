@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,9 +75,9 @@ public class Card {
     private static final double threshold = 0.02;
 
     PrimaryColor color;
-    Shape shape;
-    Fill fill;
     Number number;
+    Fill fill;
+    Shape shape;
     PixelArea pa;
 
     private ArrayList<PixelArea> internal;
@@ -93,11 +94,19 @@ public class Card {
         color = getColor(Image.convert(cardArea.pixelSquare));
         shape = getShape();
         number = getNumber();
+
         fill = getFill();
     }
 
+    public Card(PrimaryColor c, Number n, Fill f, Shape s) {
+        color = c;
+        shape = s;
+        fill = f;
+        number = n;
+    }
+
     public String toString() {
-        return "Color = " + color.name() + "Num = " + number.name() + ", Fill = " + fill.name() + ", Shape = " + shape.name() + "\n";
+        return "{" + color.name() + " " + number.name() + " " + fill.name() + " " + shape.name() + "}";
     }
 
     public PrimaryColor getColor(int[][] grid) {
@@ -127,13 +136,15 @@ public class Card {
     }
 
     public Fill getFill() {
+
+
+
         int[] avg = highlight.getAvg(cardArea, baseGrid[0], baseGrid[1], baseGrid[2]);
 
         PixelArea area1 = internal.get(0);
+        removeEdges(area1);
 
         double dist = highlight.getAvgDistance(area1, baseGrid[0], baseGrid[1], baseGrid[2], avg, 6);
-
-        System.out.println(dist);
 
         return getFillThreshold(dist);
     }
@@ -172,7 +183,8 @@ public class Card {
         
     }
 
-    public static Fill getFillThreshold(double r){
+
+    private static Fill getFillThreshold(double r){
 
         for(Fill k : Fill.values()){
             if(r < k.getThreshold()) return k;
@@ -181,7 +193,7 @@ public class Card {
         return Fill.values()[Fill.values().length-1];
     }
 
-    public static Shape getShapeThreshold(double r){
+    private static Shape getShapeThreshold(double r){
 
         for(Shape k : Shape.values()){
             if(r < k.getThreshold()) return k;
@@ -189,6 +201,14 @@ public class Card {
 
         System.err.println("Hello");
         return Shape.values()[Shape.values().length-1];
+    }
+
+    private static void removeEdges(PixelArea area) {
+        for(int r = 0; r < 6; r++){
+
+            area.pixelSquare = removeedges.removeEdges(area.pixelSquare[0],area.pixelSquare[1],area.pixelSquare[2] );
+
+        }
     }
 
 /*
@@ -225,13 +245,11 @@ public class Card {
     }
     */
 
-    public static boolean[] getMatchTable(Card c1, Card c2) {
-        return new boolean[]{
-            c1.color == c2.color,
-            c1.shape == c2.shape,
-            c1.fill == c2.fill,
-            c1.number == c2.number
-        };
+    private static int getMatchTable(Card c1, Card c2) {
+        return ((c1.color == c2.color ? 1 : 0)) | 
+        ((c1.shape == c2.shape ? 1 : 0) << 1) | 
+        ((c1.fill == c2.fill ? 1 : 0) << 2) | 
+        ((c1.number == c2.number ? 1 : 0) << 3);
     }
 
     private static double findMinDist(int pixel, int[] colors) {
@@ -242,17 +260,34 @@ public class Card {
         return minAwayDist;
     }
 
+    private static void testMatch() {
+        Card c1 = new Card(PrimaryColor.BLUE, Number.THREE, Fill.SHADED, Shape.CIRCLE);
+        Card c2 = new Card(PrimaryColor.RED, Number.THREE, Fill.SHADED, Shape.CIRCLE);
+        Card c3 = new Card(PrimaryColor.GREEN, Number.THREE, Fill.SHADED, Shape.CIRCLE);
+
+        int mt1 = getMatchTable(c1, c2);
+        int mt2 = getMatchTable(c2, c3);
+        int mt3 = getMatchTable(c1, c3);
+
+        System.out.println(mt1 == mt2 && mt2 == mt3);
+    }
+
     public static ArrayList<Card[]> matches(ArrayList<Card> cards) {
         ArrayList<Card[]> tr = new ArrayList<>();
         for (int i = 0; i < cards.size(); i++) {
             Card ic = cards.get(i);
             for (int j = i + 1; j < cards.size(); j++) {
-                boolean[] ijMatchTable = getMatchTable(ic, cards.get(j));
+                Card jc = cards.get(j);
+
+                int ijMatchTable = getMatchTable(ic, jc);
                 for (int k = j + 1; k < cards.size(); k++) {
-                    boolean[] ikMatchTable = getMatchTable(ic, cards.get(k));
+                    Card kc = cards.get(k);
 
-                    for (int l = 0; l < ikMatchTable.length; l++) if (ijMatchTable[l] != ikMatchTable[l]) continue;
+                    int ikMatchTable = getMatchTable(ic, kc);
+                    int jkMatchTable = getMatchTable(jc, kc);
 
+                    if (ijMatchTable != ikMatchTable || ijMatchTable != jkMatchTable) continue;
+                    
                     tr.add(new Card[]{ic, cards.get(j), cards.get(k)});
 
                 }

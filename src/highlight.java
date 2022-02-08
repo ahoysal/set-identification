@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class highlight{
@@ -109,11 +110,9 @@ public class highlight{
 
             int[] avgCol = getAvgSquare(area1, red, green, blue);
 
-            removeedges remover = new removeedges();
-
             for(int r = 0; r < 6; r++){
 
-                short[][][] newedged = remover.removeEdges(area1.pixelSquare[0],area1.pixelSquare[1],area1.pixelSquare[2] );
+                short[][][] newedged = removeedges.removeEdges(area1.pixelSquare[0],area1.pixelSquare[1],area1.pixelSquare[2] );
 
                 area1.pixelSquare[0] = newedged[0];
                 area1.pixelSquare[1] = newedged[1];
