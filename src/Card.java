@@ -179,6 +179,10 @@ public class Card {
         
     }
 
+    public void draw(int[][] grid) {
+        baseGrid = Image.convert(grid);
+        Renderer.drawText(grid, toString(), (cardArea.minX + cardArea.maxX) / 2, (cardArea.minY + cardArea.maxY) / 2, Color.rgb2int(0, 0, 0));
+    }
 
     private static Fill getFillThreshold(double r){
 

@@ -6,21 +6,29 @@ import java.awt.Desktop;
 
 public class Main {
     public static void main(String[] args) {
-        Image input = new Image("inputs/input4.jpeg");
+        Image input = new Image("inputs/input6.jpeg");
 
-        short[][][] grid = Image.convert(input.getGrid());
+        int[][] q = input.getGrid();
+        short[][][] grid = Image.convert(q);
 
         ArrayList<Card> cards = Card.getCards(grid);
         for (Card card : cards) {
             System.out.println(card);
+            card.draw(q);
         }
 
         ArrayList<Card[]> matches = Card.matches(cards);
         for (Card[] m : matches) {
             System.out.println(Arrays.deepToString(m));
         }
+
+
+        Image output = new Image("outputs/output6.png", grid[0].length, grid.length);
+
+        output.setGrid(q);
         
         imageTest();
+        
     }
 
     public static void imageTest() {
@@ -30,6 +38,7 @@ public class Main {
         //identify("inputs/input3.png", "outputs/output3.png");
         identify("inputs/input4.jpeg", "outputs/output4.png", true);
         //identify("inputs/input5.jpeg", "outputs/output5.png");
+        //identify("inputs/input6.jpeg", "outputs/output6.png", true);
 
         System.out.println("finished with 0 errors!");
     }

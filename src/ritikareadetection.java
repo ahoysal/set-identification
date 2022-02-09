@@ -29,7 +29,7 @@ public class ritikareadetection{
     //If you increase neighborSize to 2, it'll bypass the line
     //If it's a 2 pixel wide line, you can set it to 3
     //neighborSize makes the program exponentially more laggy though
-    public static int neighborSize = 1;
+    public static int neighborSize = 4;
 
 
     public static ArrayList<PixelArea> processImage(short[][] red, short[][] green, short[][] blue) {
