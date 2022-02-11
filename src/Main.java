@@ -6,9 +6,12 @@ import java.awt.Desktop;
 
 public class Main {
     public static void main(String[] args) {
-        Image input = new Image("inputs/input6.jpeg");
+        Image input = new Image("inputs/setGame1.png");
 
         int[][] q = input.getGrid();
+
+        q = highlight.prepareImage(q);
+
         short[][][] grid = Image.convert(q);
 
         ArrayList<Card> cards = Card.getCards(grid);
@@ -23,11 +26,11 @@ public class Main {
         }
 
 
-        Image output = new Image("outputs/output6.png", grid[0].length, grid.length);
+        Image output = new Image("outputs/outputGame1.png", q[0].length, q.length);
 
         output.setGrid(q);
         
-        imageTest();
+        //imageTest();
         
     }
 

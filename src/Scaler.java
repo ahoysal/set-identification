@@ -6,7 +6,7 @@ public class Scaler {
         this.nh = nh;
     }
 
-    public void processImage(int[][] grid) {
+    public int[][] processImage(int[][] grid) {
         int[][] ngrid = new int[nh][nw];
 
         double hScale = grid.length / (double) nh, wScale = grid[0].length / (double) nw;
@@ -17,6 +17,8 @@ public class Scaler {
                 ngrid[r][c] = sample(grid, hScale, wScale, r, c);
             }
         }
+
+        return ngrid;
     }
 
     private int sample(int[][] grid, double hScale, double wScale, int nr, int nc) {

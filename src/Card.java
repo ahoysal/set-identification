@@ -8,7 +8,7 @@ public class Card {
 
     public static enum Shape {
         DIAMOND (0.096),
-        SQUIGGLE (0.128),
+        SQUIGGLE (0.125),
         CIRCLE (100);
 
         private double threshold;
@@ -71,7 +71,7 @@ public class Card {
     
     // if close to AWAYS values by threshold, disregard as noise
     // higher theshold = more noise resistant, more likley to remove useful color info
-    private static final double threshold = 0.02;
+    private static final double threshold = 0.05;
 
     PrimaryColor color;
     Number number;
@@ -121,8 +121,6 @@ public class Card {
 
                 PrimaryColor maxPrime = Color.maxPrimary(pixel);
                 count.put(maxPrime, count.getOrDefault(maxPrime, 0) + 1);
-
-                grid[r][c] = maxPrime.getValue();
             }
         }
         
@@ -181,7 +179,7 @@ public class Card {
 
     public void draw(int[][] grid) {
         baseGrid = Image.convert(grid);
-        Renderer.drawText(grid, toString(), (cardArea.minX + cardArea.maxX) / 2, (cardArea.minY + cardArea.maxY) / 2, Color.rgb2int(0, 0, 0));
+        Renderer.drawText(grid, toString(), cardArea.minX, cardArea.minY, Color.rgb2int(0, 0, 0)); //(cardArea.minX + cardArea.maxX) / 2, (cardArea.minY + cardArea.maxY) / 2, Color.rgb2int(0, 0, 0));
     }
 
     private static Fill getFillThreshold(double r){

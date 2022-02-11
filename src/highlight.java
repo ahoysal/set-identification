@@ -3,7 +3,18 @@ import java.util.ArrayList;
 
 
 public class highlight{
+    
+    final static int totalSize = 762048;
 
+    public static int[][] prepareImage(int[][] grid) {
+        double divide = Math.sqrt(totalSize / (double) (grid.length * grid[0].length));
+
+        System.out.println((int) (divide * grid[0].length));
+        System.out.println((int) (divide * grid.length));
+        Scaler scaler = new Scaler((int) (divide * grid[0].length), (int) (divide * grid.length));
+        
+        return scaler.processImage(grid);
+    }
 
     public static short[][][] processImage(short[][] red, short[][] green, short[][] blue) {
 

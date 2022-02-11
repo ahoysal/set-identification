@@ -14,8 +14,8 @@ public class ritikareadetection{
     //For example, any shade of white has a ratio of 1:1:1
 
     public static double[] colorRatio = new double[]{1,1};;
-    public static double[] colorRatioVariance = new double[]{0.14,0.14};
-    public static int[] colorRatioMaximum = new int[]{160,160,160};
+    public static double[] colorRatioVariance = new double[]{0.1,0.1};
+    public static int[] colorRatioMaximum = new int[]{240,240,240};
 
 
     public static boolean inverse = false;
