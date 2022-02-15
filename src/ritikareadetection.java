@@ -14,8 +14,8 @@ public class ritikareadetection{
     //For example, any shade of white has a ratio of 1:1:1
 
     public static double[] colorRatio = new double[]{1,1};;
-    public static double[] colorRatioVariance = new double[]{0.1,0.1};
-    public static int[] colorRatioMaximum = new int[]{240,240,240};
+    public static double[] colorRatioVariance = new double[]{0.14,0.14};
+    public static int[] colorRatioMaximum = new int[]{160,160,160};
 
 
     public static boolean inverse = false;
@@ -29,7 +29,7 @@ public class ritikareadetection{
     //If you increase neighborSize to 2, it'll bypass the line
     //If it's a 2 pixel wide line, you can set it to 3
     //neighborSize makes the program exponentially more laggy though
-    public static int neighborSize = 4;
+    public static int neighborSize = 1;
 
 
     public static ArrayList<PixelArea> processImage(short[][] red, short[][] green, short[][] blue) {

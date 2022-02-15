@@ -5,37 +5,17 @@ import java.util.Arrays;
 import java.awt.Desktop;
 
 public class Main {
+
+    /*
+
+        TODO: 
+    */
+
     public static void main(String[] args) {
-        Image input = new Image("inputs/setGame1.png");
-
-        int[][] q = input.getGrid();
-
-        q = highlight.prepareImage(q);
-
-        short[][][] grid = Image.convert(q);
-
-        ArrayList<Card> cards = Card.getCards(grid);
-        for (Card card : cards) {
-            System.out.println(card);
-            card.draw(q);
-        }
-
-        ArrayList<Card[]> matches = Card.matches(cards);
-        for (Card[] m : matches) {
-            System.out.println(Arrays.deepToString(m));
-        }
-
-
-        Image output = new Image("outputs/outputGame1.png", q[0].length, q.length);
-
-        output.setGrid(q);
-        
-        //imageTest();
-        
+        imageTest();
     }
 
     public static void imageTest() {
-
         identify("inputs/input1.jpeg", "outputs/output1.png");
         //identify("inputs/input2.jpeg", "outputs/output2.png");
         //identify("inputs/input3.png", "outputs/output3.png");
@@ -46,21 +26,33 @@ public class Main {
         System.out.println("finished with 0 errors!");
     }
 
-    private static void identify(String inputPath, String outputPath) {
+    private static long identify(String inputPath, String outputPath) {
         long start = System.currentTimeMillis();
+
+        // get and prepare image
         Image input = new Image(inputPath);
+        int[][] grid = input.getGrid();
 
-        short[][][] grid = Image.convert(input.getGrid());
-        
-        short[][][] newgrid = highlight.processImage(grid[0], grid[1], grid[2]);
+        // find, print, and draw cards to grid
+        ArrayList<Card> cards = Card.getCards(Image.convert(grid));
+        for (Card card : cards) {
+            System.out.println(card);
+            card.draw(grid);
+        }
 
+        // find and print matches found
+        ArrayList<Card[]> matches = Card.matches(cards);
+        for (Card[] m : matches) {
+            System.out.println(Arrays.deepToString(m));
+        }
+
+        // create and set a new output image (so we can run more tests on the input image)
         Image output = new Image(outputPath, grid[0].length, grid.length);
+        output.setGrid(grid);
 
-        System.out.println("yo: " + (System.currentTimeMillis() - start));
-
-        output.setGrid(Image.convert(newgrid));
-
+        return System.currentTimeMillis() - start; // return total time
     }
+
     private static void identify(String inputPath, String outputPath, boolean open) {
         identify(inputPath, outputPath);
         if(open){

@@ -95,6 +95,8 @@ public class Card {
         number = getNumber();
 
         fill = getFill();
+
+        ritikareadetection.inverse = false;
     }
 
     public Card(PrimaryColor c, Number n, Fill f, Shape s) {
