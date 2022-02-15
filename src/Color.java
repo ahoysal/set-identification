@@ -1,6 +1,6 @@
 public class Color {
 
-    private final static double purpleThreshold = 0.075;
+    private final static double purpleThreshold = 0.2;
 
     public static int rgb2int(int r, int g, int b) {
         return (0xFF << 24) + (r << 16) + (g << 8) + (b);

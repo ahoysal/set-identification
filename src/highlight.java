@@ -8,9 +8,6 @@ public class highlight{
 
     public static int[][] prepareImage(int[][] grid) {
         double divide = Math.sqrt(totalSize / (double) (grid.length * grid[0].length));
-
-        System.out.println((int) (divide * grid[0].length));
-        System.out.println((int) (divide * grid.length));
         Scaler scaler = new Scaler((int) (divide * grid[0].length), (int) (divide * grid.length));
         
         return scaler.processImage(grid);
@@ -23,14 +20,6 @@ public class highlight{
 
         double[] states = {8, 200, 1000};
         String[] statesStr = {"hollow", "shaded", "filled"};
-        /*
-        Convolution filter = new Convolution();
-        short[][][] op = filter.drawOverlay(red, green, blue, filter.blurKernel);
-
-        red = op[0];
-        green = op[1];
-        blue = op[2];
-        */
 
         ritikareadetection.colorRatio = new double[]{1,1};
         ritikareadetection.colorRatioVariance = new double[]{0.14,0.14};

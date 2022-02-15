@@ -77,16 +77,17 @@ public class Card {
     Number number;
     Fill fill;
     Shape shape;
-    PixelArea pa;
+    PixelArea cardArea;
 
     private ArrayList<PixelArea> internal;
-    private PixelArea cardArea;
     private short[][][] baseGrid;
 
 
     public Card(PixelArea cardArea, short[][][] baseGrid) {
         this.baseGrid = baseGrid;
         this.cardArea = cardArea;
+
+        System.out.println(this.cardArea.pixelSquare.length);
         ritikareadetection.inverse = true;
         internal = ritikareadetection.processImage(cardArea.pixelSquare[0], cardArea.pixelSquare[1], cardArea.pixelSquare[2]);
 
