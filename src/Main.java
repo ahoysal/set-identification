@@ -5,12 +5,6 @@ import java.util.Arrays;
 import java.awt.Desktop;
 
 public class Main {
-
-    /*
-
-        TODO: 
-    */
-
     public static void main(String[] args) {
         imageTest();
     }
@@ -34,11 +28,6 @@ public class Main {
 
         int[][] grid = highlight.prepareImage(input.getGrid());
 
-
-
-
-        int xl = grid[0].length;
-
         // find, print, and draw cards to grid
         ArrayList<Card> cards = Card.getCards(Image.convert(grid));
         for (Card card : cards) {
@@ -46,6 +35,7 @@ public class Main {
             card.draw(grid);
         }
 
+        int xl = grid[0].length; // for larger grid with matches
         int extendAmount = 600;
         int[][] extended = new int[grid.length][grid[0].length + extendAmount];
 
@@ -54,8 +44,6 @@ public class Main {
                 extended[y][x] = grid[y][x];
             }
         }
-
-
 
 
         // find and print matches found
@@ -69,17 +57,10 @@ public class Main {
 
 
         for (Card[] m : matches) {
-
-
-
             for(int i = 0; i < m.length; i++){
-
                 drawCard(m[i], extended, xl + cardW*i, setcardYC, cardW, cardH);
-
             }
-
             setcardYC += setcardYP;
-
             System.out.println(Arrays.deepToString(m));
         }
 

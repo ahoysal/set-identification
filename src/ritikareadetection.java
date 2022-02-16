@@ -258,15 +258,9 @@ public class ritikareadetection{
 
     public static boolean difference(short[] color, short[] color2, int[] range){
 
-        //System.out.println("YUH!");
-
-        int[] sum = new int[color.length];
-
         for(int i = 0; i < color.length; i++) if(Math.abs(color[i] - color2[i]) > range[i]) return false;
 
         return true;
-
-
 
     }
 
