@@ -138,10 +138,9 @@ public class Card {
     public Fill getFill() {
         int[] avg = highlight.getAvg(cardArea, baseGrid[0], baseGrid[1], baseGrid[2]);
 
-
         if (internal.size() == 0) return Fill.EMPTY;
         PixelArea area1 = internal.get(0);
-        removeEdges(area1);
+        removeEdges(area1, 6);
 
         double dist = highlight.getAvgDistance(area1, baseGrid[0], baseGrid[1], baseGrid[2], avg, 6);
 
@@ -182,7 +181,7 @@ public class Card {
 
     public void draw(int[][] grid) {
         baseGrid = Image.convert(grid);
-        Renderer.drawText(grid, toString(), cardArea.minX, cardArea.minY, Color.rgb2int(0, 0, 0)); //(cardArea.minX + cardArea.maxX) / 2, (cardArea.minY + cardArea.maxY) / 2, Color.rgb2int(0, 0, 0));
+        Renderer.drawText(grid, toString(), cardArea.minX, cardArea.minY, Color.BLACK);
     }
 
     private static Fill getFillThreshold(double r){
@@ -204,8 +203,8 @@ public class Card {
         return Shape.values()[Shape.values().length-1];
     }
 
-    private static void removeEdges(PixelArea area) {
-        for(int r = 0; r < 6; r++){
+    private static void removeEdges(PixelArea area, int pixelsToRemove) {
+        for(int r = 0; r < pixelsToRemove; r++){
 
             area.pixelSquare = removeedges.removeEdges(area.pixelSquare[0],area.pixelSquare[1],area.pixelSquare[2] );
 

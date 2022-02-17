@@ -15,7 +15,9 @@ public class Main {
         //identify("inputs/input3.png", "outputs/output3.png");
         //identify("inputs/input4.jpeg", "outputs/output4.png", true);
         //identify("inputs/input5.jpeg", "outputs/output5.png");
-        identify("inputs/input6.jpeg", "outputs/output6.png", true);
+        //identify("inputs/input6.jpeg", "outputs/output6.png", true);
+        identify("inputs/setGame1.png", "outputs/outputGame1.png");
+        //identify("inputs/setGame2.png", "outputs/outputGame2.png");
 
         System.out.println("finished with 0 errors!");
     }
@@ -25,7 +27,6 @@ public class Main {
 
         // get and prepare image
         Image input = new Image(inputPath);
-
         int[][] grid = highlight.prepareImage(input.getGrid());
 
         // find, print, and draw cards to grid
@@ -96,14 +97,12 @@ public class Main {
     public static void drawCard(Card card, int[][] grid, int xp, int yp, int sx, int sy){
         short[][][] square  = card.cardArea.pixelSquare;
 
-
         int[][] squareConverted = Image.convert(square);
 
         int cardw = sx;
         int cardh = sy;
 
         Scaler scaleCard = new Scaler(cardw, cardh);
-
         int[][] squareScaled = scaleCard.processImage(squareConverted);
 
         for(int y = 0; y < cardh; y++){

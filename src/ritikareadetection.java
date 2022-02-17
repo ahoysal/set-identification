@@ -92,6 +92,20 @@ public class ritikareadetection{
     }
 
 
+    /**
+     * Flooding algortithm
+     * @param red a short[][] containing red values of image
+     * @param green a short[][] containing green values of image
+     * @param blue a short[][] containing blue values of image
+     * @param copy a short[][], where results are stored
+     * @param badpixels a short[][] of pixels to avoid in detection
+     * @param start (x, y) loc where to start the algorithim
+     * @param color short[] representing a color for base color
+     * @param colorVariance how much the color can vary before it cuts off
+     * @param neighborSize how many pixels it can "skip over"
+     * @param adjacents i.e diagonal neighbors
+     * @return Pixel area of detected area
+     */
     public static PixelArea floodDetection(short[][] red, short[][] green, short[][] blue, short[][] copy, short[][] badpixels, int[] start, short[] color, int[] colorVariance, int neighborSize, boolean adjacents){
         //note it's not really the flood fill algorithm
         //flood is a good name for what i'm doing thuogh
@@ -235,6 +249,14 @@ public class ritikareadetection{
 
     }
 
+    public static PixelArea floodDetection(short[][] red, short[][] green, short[][] blue, short[][] copy, short[][] badpixels, int[] start, short[] color, int[] colorVariance, int neighborSize, int[] colorRatioMax, boolean adjacents){
+        int[] original = colorRatioMaximum.clone(); // save a copy of original
+        colorRatioMaximum = colorRatioMax; // set to current presets
+        PixelArea tr = floodDetection(red, green, blue, copy, badpixels, start, color, colorVariance, neighborSize, adjacents); // get results
+        colorRatioMaximum = original; // return to default
+        return tr;
+    }
+
 
     public static ArrayList<int[]> getNeighbors(int[] loc, int size, boolean adjacent){
 
@@ -290,10 +312,7 @@ public class ritikareadetection{
 
 class PixelArea{
 
-    int minX;
-    int minY;
-    int maxX;
-    int maxY;
+    int minX, minY, maxX, maxY;
     short[][][] pixelSquare;
     ArrayList<int[]> pixelLocations;
     ArrayList<int[]> pixelSquareLocations;

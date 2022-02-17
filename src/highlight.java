@@ -1,7 +1,3 @@
-
-import java.util.ArrayList;
-
-
 public class highlight {
     
     final static int totalSize = 762048;
@@ -9,35 +5,20 @@ public class highlight {
     public static int[][] prepareImage(int[][] grid) {
         double divide = Math.sqrt(totalSize / (double) (grid.length * grid[0].length));
         Scaler scaler = new Scaler((int) (divide * grid[0].length), (int) (divide * grid.length));
-        
-        return scaler.processImage(grid);
-    }
 
-    public static int[] getAvgSquare(PixelArea area, short[][] red, short[][] green, short[][] blue){
-        int[] avgCol = {0,0,0};
-        int counted = 0;
+        grid = scaler.processImage(grid);
 
-        for(int y = 0; y < area.pixelSquare[0].length; y++){
-            for(int x = 0; x < area.pixelSquare[0][0].length; x++){
+        short[][][] sg = Image.convert(grid);
 
-                short r = area.pixelSquare[0][y][x];
-                short g = area.pixelSquare[1][y][x];
-                short b = area.pixelSquare[2][y][x];
-
-                if (r + g + b == 0) continue;
-                counted++;
-
-                avgCol[0] += r;
-                avgCol[1] += g;
-                avgCol[2] += b;
-            }
+        short[][] blank = new short[grid.length][grid[0].length];
+                
+        for (int[] loc : ritikareadetection.floodDetection(sg[0], sg[1], sg[2], blank, blank, new int[]{0, 0}, Color.int2sarr(grid[0][0]), new int[]{1, 1, 1}, 1, new int[]{234, 234, 234}, false).pixelLocations) {
+            grid[loc[1]][loc[0]] = Color.rgb2int(100, 100, 100);
         }
 
-        avgCol[0] /= counted;
-        avgCol[1] /= counted;
-        avgCol[2] /= counted;
+        grid = Blurer.applyBlur(grid, 1);
 
-        return avgCol;
+        return grid;
     }
 
     public static int[] getAvg(PixelArea area, short[][] red, short[][] green, short[][] blue){
@@ -112,30 +93,6 @@ public class highlight {
 
 
         return avg/count;
-    }
-
-    public void fillArea(short[][] red, short[][] green, short[][] blue, ArrayList<int[]> pixels, short[] color){
-
-        for(int i = 0; i < pixels.size(); i++){
-
-            int[] loc = pixels.get(i);
-
-            red[loc[1]][loc[0]] = color[0];
-            green[loc[1]][loc[0]] = color[1];
-            blue[loc[1]][loc[0]] = color[2];
-
-        }
-
-
-    }
-
-    public static String getShape(double r, double[] n, String[] s){
-
-        for(int a = 0; a < n.length; a++){
-            if(r < n[a]) return s[a];
-        }
-
-        return s[s.length-1];
     }
 
 }

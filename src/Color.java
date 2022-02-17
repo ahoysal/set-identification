@@ -1,9 +1,18 @@
 public class Color {
 
     private final static double purpleThreshold = 0.2;
+    public final static int BLACK = 0x000000;
 
     public static int rgb2int(int r, int g, int b) {
         return (0xFF << 24) + (r << 16) + (g << 8) + (b);
+    }
+
+    public static int sarr2int(short[] c) {
+        return rgb2int(c[0], c[1], c[2]);
+    }
+
+    public static short[] int2sarr(int c) {
+        return new short[]{(short) getRed(c), (short) getGreen(c), (short) getBlue(c)};
     }
 
     public static int getRed(int rgb) {
