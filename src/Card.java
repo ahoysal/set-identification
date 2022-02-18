@@ -8,7 +8,7 @@ public class Card {
 
     public static enum Shape {
         DIAMOND (0.096),
-        SQUIGGLE (0.125),
+        SQUIGGLE (0.124),
         CIRCLE (100);
 
         private double threshold;
@@ -39,7 +39,7 @@ public class Card {
     public static enum Fill {
         EMPTY (8),
         SHADED (200),
-        FILLED (1000);
+        FILLED (10000);
 
         private double threshold;
         private Fill(double threshold) {
@@ -82,12 +82,15 @@ public class Card {
     private ArrayList<PixelArea> internal;
     private short[][][] baseGrid;
 
+    private static final int TEXT_LINE_SPACE = 5;
+    private static final int TEXT_MARGIN = 10;
+    private static final int TEXT_COLOR = Color.rgb2int(100, 100, 100);
+
 
     public Card(PixelArea cardArea, short[][][] baseGrid) {
         this.baseGrid = baseGrid;
         this.cardArea = cardArea;
 
-        System.out.println(this.cardArea.pixelSquare.length);
         ritikareadetection.inverse = true;
         internal = ritikareadetection.processImage(cardArea.pixelSquare[0], cardArea.pixelSquare[1], cardArea.pixelSquare[2]);
 
@@ -144,6 +147,7 @@ public class Card {
 
         double dist = highlight.getAvgDistance(area1, baseGrid[0], baseGrid[1], baseGrid[2], avg, 6);
 
+        System.out.println(dist);
         return getFillThreshold(dist);
     }
 
@@ -181,7 +185,10 @@ public class Card {
 
     public void draw(int[][] grid) {
         baseGrid = Image.convert(grid);
-        Renderer.drawText(grid, toString(), cardArea.minX, cardArea.minY, Color.BLACK);
+        int next = Renderer.drawText(grid, this.color.name(), cardArea.minX + TEXT_MARGIN, cardArea.minY + TEXT_MARGIN, TEXT_COLOR) + TEXT_LINE_SPACE;
+        next = Renderer.drawText(grid, this.number.name(), cardArea.minX + TEXT_MARGIN, next, TEXT_COLOR) + TEXT_LINE_SPACE;
+        next = Renderer.drawText(grid, this.fill.name(), cardArea.minX + TEXT_MARGIN, next, TEXT_COLOR) + TEXT_LINE_SPACE;
+        Renderer.drawText(grid, this.shape.name(), cardArea.minX + TEXT_MARGIN, next, TEXT_COLOR);
     }
 
     private static Fill getFillThreshold(double r){
@@ -210,40 +217,6 @@ public class Card {
 
         }
     }
-
-/*
-    private static final double fillThreshold = 0.15;
-    public static Fill getFill(int[][] grid) {
-        // get center of grid
-        int cr = grid.length / 2, cc = grid[0].length / 2;
-        // flood fill, then get contrast
-        ArrayList<int[]> activeLocations = new ArrayList<int[]>(){{
-            add(new int[]{cr, cc});
-        }};
-
-        int baseColor = grid[cr][cc];
-        int accumulated = 0;
-        Integer count = 0;
-
-        ArrayList<int[]> newLocs = new ArrayList<>();
-        while (activeLocations.size() != 0) {
-            for (int[] loc : activeLocations) {
-                for (int[] newLoc : getNeighborhood(grid, loc[0], loc[1])) {
-                    if (Color.getDistance2(baseColor, grid[newLoc[0]][newLoc[1]]) < fillThreshold) {
-                        Color.averageColors(accumulated, grid[newLoc[0]][newLoc[1]], count);
-                        newLocs.add(newLoc);
-                    }
-                }
-            }
-
-            activeLocations.clear();
-            activeLocations.addAll(newLocs);
-            newLocs.clear();
-        }
-
-
-    }
-    */
 
     public static ArrayList<Card> getCards(short[][][] image) {
         ArrayList<Card> cards = new ArrayList<>();

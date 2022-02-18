@@ -10,13 +10,13 @@ public class Main {
     }
 
     public static void imageTest() {
-        //identify("inputs/input1.jpeg", "outputs/output1.png");
+        identify("inputs/input1.jpeg", "outputs/output1.png", true);
         //identify("inputs/input2.jpeg", "outputs/output2.png");
         //identify("inputs/input3.png", "outputs/output3.png");
         //identify("inputs/input4.jpeg", "outputs/output4.png", true);
         //identify("inputs/input5.jpeg", "outputs/output5.png");
         //identify("inputs/input6.jpeg", "outputs/output6.png", true);
-        identify("inputs/setGame1.png", "outputs/outputGame1.png");
+        //identify("inputs/setGame1.png", "outputs/outputGame1.png");
         //identify("inputs/setGame2.png", "outputs/outputGame2.png");
 
         System.out.println("finished with 0 errors!");

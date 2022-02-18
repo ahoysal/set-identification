@@ -76,8 +76,9 @@ public class Renderer {
         Renderer.drawLine(grid, x0, y1, x1, y0, color);
     }
 
-    public static void drawText(int[][] grid, String text, int x, int y, int color) {
+    public static int drawText(int[][] grid, String text, int x, int y, int color) {
         text = text.toLowerCase();
+        int gMaxY = 0;
         for (int ci = 0; ci < text.length(); ci++) {
             char c = text.charAt(ci);
             if (x >= grid[0].length || y >= grid.length) break;
@@ -93,12 +94,15 @@ public class Renderer {
                 if(loc[1] > maxY) maxY = loc[1];
 
                 if(loc[0] + x >= grid[0].length || loc[1] + y >= grid.length) {
-                    return;
+                    return y + gMaxY;
                 }
                 grid[y + loc[1]][x + loc[0]] = color;
             }
 
+            if (maxY > gMaxY) gMaxY = maxY;
+
             x += maxX + 2;
         }
+        return y + gMaxY;
     }
 }
